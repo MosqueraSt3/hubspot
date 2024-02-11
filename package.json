@@ -2,7 +2,7 @@
   "name": "rick-morty-api",
   "version": "1.0.0",
   "description": "on the fuze challenge",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "tsnd --respawn --clear src/app.ts",
     "build": "rimraf ./dist && tsc",
@@ -24,5 +24,8 @@
     "rimraf": "^5.0.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "env-var": "^7.4.1"
   }
 }

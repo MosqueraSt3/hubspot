@@ -1,3 +1,6 @@
+# Custom ignores
+.env
+
 # Logs
 logs
 *.log
