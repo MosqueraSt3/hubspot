@@ -1,19 +1,23 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 
+import { CharacterRepository, GetOddsCharacters, GetTotalOfCharacters } from '../../domain/characters';
+
 export class CharacterController {
 
-    constructor() { }
+    constructor(
+        private readonly characterRepository: CharacterRepository,
+    ) { }
 
     public getCharacters = async (req: Request, res: Response) => {
         try {
-            const response = await axios.get(`https://rickandmortyapi.com/api/character`);
-            const totalCharacters = response.data.info.count;
-            const idsOdd = this.getIdsOdds(totalCharacters);
-            idsOdd.unshift(1);
-            const responseOddCharacters = await axios.get(`https://rickandmortyapi.com/api/character/${idsOdd}`);
-            res.status(200).json(responseOddCharacters.data);
+            const totalOfCharacters = await new GetTotalOfCharacters(this.characterRepository).execute();
+            const idsOddArray = this.getIdsOdds(totalOfCharacters);
+            idsOddArray.unshift(1);
+            const oddsCharacters = await new GetOddsCharacters(this.characterRepository).execute(idsOddArray);
+            res.status(200).json(oddsCharacters);
         } catch (error) {
+            console.log(error);
             res.status(500).json({ message: 'Error getting characters' })
         }
     }

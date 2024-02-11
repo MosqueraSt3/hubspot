@@ -1,5 +1,8 @@
 import { Router } from 'express';
+
 import { CharacterController } from './controller';
+import { CharacterDataSourceImpl } from '../../infrastructure/characters/character.datasource.impl';
+import { CharacterRepositoryImpl } from '../../infrastructure/characters/character.repository.impl';
 
 export class CharacterRoutes {
     constructor() {}
@@ -7,9 +10,11 @@ export class CharacterRoutes {
     static get routes(): Router {
         const router = Router();
 
-        const todoController = new CharacterController();
+        const dataSource = new CharacterDataSourceImpl();
+        const characterRepository = new CharacterRepositoryImpl(dataSource);
+        const characterController = new CharacterController(characterRepository);
 
-        router.get('/', todoController.getCharacters);
+        router.get('/', characterController.getCharacters);
 
         return router;
     }
