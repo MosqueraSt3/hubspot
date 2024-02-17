@@ -11,7 +11,6 @@ export class CharacterDataSourceImpl implements CharacterDataSource {
 
     async getOddsCharacters(ids: number[]): Promise<CharacterEntity[]> {
         const characters = await axios.get(`https://rickandmortyapi.com/api/character/${ids}`);
-        
         return characters.data.map(CharacterEntity.parseCharacter);
     }
 }

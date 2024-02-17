@@ -5,7 +5,7 @@ export interface IGetLocationsUseCase {
     execute(id: number[]): Promise<LocationEntity[]>;
 }
 
-export class GetOddsCharacters implements IGetLocationsUseCase {
+export class GetLocations implements IGetLocationsUseCase {
     constructor(
         private readonly repository: LocationRepository,
     ) {}

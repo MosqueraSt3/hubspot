@@ -8,7 +8,9 @@ import { MigrationDataSource } from '../../domain/characters/datasources/migrati
 export class MigrationDataSourceImpl implements MigrationDataSource {
     async createCompany(location: LocationEntity): Promise<void> {
         await axios.post('https://api.hubapi.com/crm/v3/objects/companies',
-        location,
+        {
+            properties: location
+        },
         {
             headers: {
                 'Authorization': `Bearer ${envs.TOKEN_HUBSPOT}`,
@@ -19,7 +21,9 @@ export class MigrationDataSourceImpl implements MigrationDataSource {
 
     async createContact(character: CharacterEntity): Promise<void> {
         await axios.post('https://api.hubapi.com/crm/v3/objects/contacts',
-        character,
+        {
+            properties: character
+        },
         {
             headers: {
                 'Authorization': `Bearer ${envs.TOKEN_HUBSPOT}`,
