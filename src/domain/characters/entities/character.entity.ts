@@ -6,7 +6,7 @@ export class CharacterEntity {
         public status_character: string,
         public character_species: string,
         public character_gender: string,
-        public company_id: number,
+        public location_id: number,
     ) {}
 
     public static parseCharacter(object: {[key: string]: any}): CharacterEntity {

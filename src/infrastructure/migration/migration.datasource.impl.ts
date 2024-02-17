@@ -20,9 +20,10 @@ export class MigrationDataSourceImpl implements MigrationDataSource {
     }
 
     async createContact(character: CharacterEntity): Promise<void> {
+        const { location_id, ...properties } = character;
         await axios.post('https://api.hubapi.com/crm/v3/objects/contacts',
         {
-            properties: character
+            properties
         },
         {
             headers: {

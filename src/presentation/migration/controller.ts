@@ -6,6 +6,7 @@ import { GetLocations } from '../../domain/characters/use-cases/get-locations';
 import { MigrationRepository } from '../../domain/characters/repositories/migration.repository';
 import { CreateContact } from '../../domain/characters/use-cases/create-contact';
 import { CreateCompany } from '../../domain/characters/use-cases/create-company';
+import { AxiosError } from 'axios';
 
 export class MigrationController {
 
@@ -22,23 +23,40 @@ export class MigrationController {
             const idsOddArray = this.getIdsOdds(totalOfCharacters);
             idsOddArray.unshift(1);
             const oddsCharacters = await new GetOddsCharacters(this.characterRepository).execute(idsOddArray);
-
+    
             // Locations
             const locationsIds = oddsCharacters.map((character) => character.location_id);
             const filteredLocationsIds = locationsIds.filter(num => !isNaN(num));
             const locations = await new GetLocations(this.locationRepository).execute(filteredLocationsIds);
-
+            
             // Migrate
-            const companyPromises = locations.map(location => new CreateCompany(this.migrationRepository).execute(location));
-            const contactPromises = oddsCharacters.map(character => new CreateContact(this.migrationRepository).execute(character));
-
-            await Promise.all([...companyPromises, ...contactPromises]);
-
+            const companyPromises = locations.map(location => 
+                new CreateCompany(this.migrationRepository).execute(location)
+            );
+    
+            const contactPromises = oddsCharacters.map(character => 
+                new CreateContact(this.migrationRepository).execute(character)
+            );
+    
+            for (const promise of companyPromises) {
+                await promise;
+                await this.delay(100);
+            }
+            
+            for (const promise of contactPromises) {
+                await promise;
+                await this.delay(1000);
+            }
+    
             res.status(200).json({ oddsCharacters, locations });
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: 'Error getting characters' })
+            res.status(429).json({ message: 'Too many request' });
         }
+    }
+    
+    private delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     private getIdsOdds(amount: number) {
