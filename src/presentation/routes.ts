@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { CharacterRoutes } from './characters/routes';
+import { MigrationRoutes } from './migration/routes';
 
 
 export class AppRoutes {
@@ -8,7 +8,7 @@ export class AppRoutes {
     static get routes(): Router {
         const router = Router();
 
-        router.use('/api/character', CharacterRoutes.routes) ;
+        router.use('/api/migration', MigrationRoutes.routes) ;
 
         return router;
     }
