@@ -7,7 +7,7 @@ export class LocationEntity {
         public creation_date: string,
     ) {}
 
-    public static parseCharacter(object: {[key: string]: any}): LocationEntity {
+    public static parseLocation(object: {[key: string]: any}): LocationEntity {
         const { id, name, type, dimension, created } = object;
         const location_id = id;
         const location_type = type;
